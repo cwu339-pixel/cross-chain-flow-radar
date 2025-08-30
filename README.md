@@ -70,3 +70,105 @@ Daily ETL → per chain/bridge/token NetFlow (USD) → anomaly explanation with 
   # needs Cloud Run Identity Token as Bearer
   curl --http1.1 -H "Authorization: Bearer <TOKEN>" \
     "<RUN_URL>?day=YYYY-MM-DD&chain=ethereum"
+### 3.3 On-chain Attestation (ZetaChain)
+
+  Network: Athens-3 (chainId 7001)
+
+  Contract address: 0x5201535153B7719715df898F82196a9948805dE4
+
+Publish (example):
+
+export ZETA_RPC="https://zetachain-athens-evm.blockpi.network/v1/rpc/public"
+export ZETA_CONTRACT=0x5201535153B7719715df898F82196a9948805dE4
+export ZETA_CHAIN_ID=7001
+export ZETA_PRIVATE_KEY=0x<your_testnet_key>
+python attest/attest.py --chain ethereum --start 2025-08-23 --end 2025-08-29
+
+
+Decode:
+
+node zetachain/scripts/decode.js 0x<tx-hash>
+
+
+Sample proofs: see /proofs/*.json in this repo.
+
+4) Local Repo Layout
+cloudrun/
+  main.py               # Cloud Run entrypoint (English)
+  requirements.txt
+sql/
+  etl_yesterday_eth.sql # BigQuery daily ETL (ETH, Tokyo window)
+attest/
+  attest.py             # Publish daily_briefings to ZetaChain
+zetachain/
+  contracts/RadarBriefingRegistry.sol
+  hardhat.config.js
+  scripts/deploy.js
+  scripts/decode.js
+proofs/
+  proof-0x....json      # Example decoded attestation receipts
+
+5) Data Model
+flows_data / flows_daily
+column	type	description
+day	DATE	Tokyo-day (UTC window shifted to Asia/Tokyo)
+chain	STRING	ethereum
+bridge	STRING	e.g. stargate / across / cbridge
+token_symbol	STRING	stablecoin symbol
+in_amount_usd	BIGNUMERIC	sum USD to bridge (deposits)
+out_amount_usd	BIGNUMERIC	sum USD from bridge (withdrawals)
+net_amount_usd	BIGNUMERIC	in − out
+tx_count	INT64	number of transfers
+unique_wallets	INT64	unique counterparties
+
+Note: MVP uses stablecoins at 1:1 USD. Extending to non-stable tokens = join hourly prices and widen symbol allowlist.
+
+6) Cloud Scheduler
+
+BigQuery Scheduled Query: sql/etl_yesterday_eth.sql at 07:55 (Asia/Tokyo)
+
+Cloud Scheduler → Cloud Run: GET /explain?... at 08:05 (no trailing slash)
+
+Auth: OIDC with service account cc-radar-sa@faefw-468503.iam.gserviceaccount.com
+
+Role: roles/run.invoker
+
+7) ZetaChain (dev notes)
+
+Hardhat (ESM):
+
+zetachain/hardhat.config.js
+
+Deploy: npx hardhat run scripts/deploy.js --network zetachain_testnet
+
+Contract event for proofs:
+
+event BriefingPublished(
+  string day,
+  string chain,
+  bytes32 summaryHash,
+  bool hasAnomaly,
+  uint256 evidenceRows,
+  string model,
+  string uri
+);
+
+8) Security & Limits
+
+Keys: keep Zeta testnet private key in env only (never commit).
+
+LLM: capped max_output_tokens and safe temperature.
+
+Costs: BigQuery scans are day-bounded; stablecoin filter reduces volume.
+
+9) Roadmap
+
+Add chains (Arbitrum/OP/BSC/Polygon) & bridges coverage.
+
+Join hourly token prices for non-stable assets.
+
+Near-real-time anomaly push (Cloud Functions / PubSub).
+
+Telegram/Discord bot for daily briefings.
+
+Looker Studio dashboard: chain→bridge→token drilldown.
