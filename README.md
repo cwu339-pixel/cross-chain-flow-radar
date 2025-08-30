@@ -97,16 +97,6 @@ Network: Athens-3 (chainId: 7001)
 
 Contract Address: 0x5201535153B7719715df898F82196a9948805dE4
 
-Publish Proof (Example):
-Set environment variables
-export ZETA_RPC="[https://zetachain-athens-evm.blockpi.network/v1/rpc/public](https://zetachain-athens-evm.blockpi.network/v1/rpc/public)"
-export ZETA_CONTRACT="0x5201535153B7719715df898F82196a9948805dE4"
-export ZETA_CHAIN_ID=7001
-export ZETA_PRIVATE_KEY="0x<YOUR_TESTNET_PRIVATE_KEY>"
-
-Run the attestation script for a date range
-python attest/attest.py --chain ethereum --start 2025-08-23 --end 2025-08-29
-
 
 ## 4. Automation & Scheduling
 
