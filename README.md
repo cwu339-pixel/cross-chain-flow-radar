@@ -98,16 +98,14 @@ Network: Athens-3 (chainId: 7001)
 Contract Address: 0x5201535153B7719715df898F82196a9948805dE4
 
 Publish Proof (Example):
-# Set environment variables
+Set environment variables
 export ZETA_RPC="[https://zetachain-athens-evm.blockpi.network/v1/rpc/public](https://zetachain-athens-evm.blockpi.network/v1/rpc/public)"
 export ZETA_CONTRACT="0x5201535153B7719715df898F82196a9948805dE4"
 export ZETA_CHAIN_ID=7001
 export ZETA_PRIVATE_KEY="0x<YOUR_TESTNET_PRIVATE_KEY>"
 
-# Run the attestation script for a date range
+Run the attestation script for a date range
 python attest/attest.py --chain ethereum --start 2025-08-23 --end 2025-08-29
-
-
 
 
 ## 4. Automation & Scheduling
@@ -122,34 +120,13 @@ python attest/attest.py --chain ethereum --start 2025-08-23 --end 2025-08-29
     - **Authentication:** Uses OIDC with the service account `cc-radar-sa@faefw-468503.iam.gserviceaccount.com`, which has the `roles/run.invoker` permission.
 
 
-## 5. Repository Layout
-
-your-repo/
-├── cloudrun/
-│   ├── main.py
-│   └── requirements.txt
-├── sql/
-│   └── etl_yesterday_eth.sql
-├── attest/
-│   └── attest.py
-└── zetachain/
-    ├── contracts/
-    │   └── RadarBriefingRegistry.sol
-    ├── hardhat.config.js
-    └── scripts/
-        ├── deploy.js
-        └── decode.js
-└── proofs/
-    └── proof-0x....json
-
-
-## 6. Security & Cost Considerations
+## 5. Security & Cost Considerations
 
 - **Keys:** The ZetaChain testnet private key should only be stored as an environment variable and never committed to the repository.
 - **LLM:** The model call has a capped `max_output_tokens` and a safe `temperature` setting to control cost and output predictability.
 - **Costs:** BigQuery scans are partitioned by day to limit cost. The stablecoin filter significantly reduces the volume of data processed.
 
-## 7. Roadmap
+## 5. Roadmap
 
 - [ ] **Multi-Chain Coverage:** Add support for chains like Arbitrum, Optimism, BSC, and Polygon.
 - [ ] **Non-Stable Asset Support:** Integrate with hourly token price feeds to analyze non-stable assets.
