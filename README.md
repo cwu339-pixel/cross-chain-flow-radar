@@ -116,7 +116,7 @@ Contract Address: 0x5201535153B7719715df898F82196a9948805dE4
 - **LLM:** The model call has a capped `max_output_tokens` and a safe `temperature` setting to control cost and output predictability.
 - **Costs:** BigQuery scans are partitioned by day to limit cost. The stablecoin filter significantly reduces the volume of data processed.
 
-## 5. Roadmap
+## 6. Roadmap
 
 - [ ] **Multi-Chain Coverage:** Add support for chains like Arbitrum, Optimism, BSC, and Polygon.
 - [ ] **Non-Stable Asset Support:** Integrate with hourly token price feeds to analyze non-stable assets.
