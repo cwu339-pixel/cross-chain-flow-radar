@@ -1,0 +1,6 @@
+Flask==3.0.3
+google-cloud-bigquery==3.25.0
+google-cloud-aiplatform==1.68.0
+vertexai==1.68.0
+requests==2.32.3
+python-dateutil==2.9.0.post0

@@ -1,0 +1,2 @@
+-- Paste your working "yesterday ETL for ETH" scheduled query here.
+-- Writes into faefw-468503.xchain_radar.flows_data / flows_daily (Asia/Tokyo window).

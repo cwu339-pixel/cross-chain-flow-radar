@@ -1,0 +1,12 @@
+{
+  "contract": "0x5201535153B7719715df898F82196a9948805dE4",
+  "txHash": "0x9f02181f324f9dcffdae30d5411c3c555409ad9c8bb7aea84841c40ff3e92aa2",
+  "blockNumber": 12408357,
+  "day": "2025-08-23",
+  "chain": "ethereum",
+  "summaryHash": "0x170fb108320c1049e686230778dc4ab722d2acfd04f0eb751182f50ec829496f",
+  "hasAnomaly": false,
+  "evidenceRows": 8,
+  "model": "gemini-1.5-flash-002",
+  "uri": ""
+}
